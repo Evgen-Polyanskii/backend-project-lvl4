@@ -6,10 +6,8 @@ const port = process.env.PORT || 5000;
 
 getApp().listen(port, '0.0.0.0', (err, address) => {
   if (err) {
-    console.log('Error', err);
-    console.log('app', getApp);
-    getApp.log.error(err)
-    process.exit(1)
+    getApp().log.error(err);
+    process.exit(1);
   }
   console.log(`Server is running on port: ${port}`);
 });
