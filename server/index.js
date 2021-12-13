@@ -126,7 +126,6 @@ export default () => {
       prettyPrint: isDevelopment,
     },
   });
-
   registerPlugins(app);
 
   setupLocalization();
