@@ -76,14 +76,6 @@ const setupLocalization = () => {
     });
 };
 
-const addHooks = (app) => {
-  app.addHook('preHandler', async (req, reply) => {
-    reply.locals = {
-      isAuthenticated: () => req.isAuthenticated(),
-    };
-  });
-};
-
 const registerPlugins = (app) => {
   app.register(fastifySensible);
   app.register(fastifyErrorPage);
@@ -117,6 +109,14 @@ const registerPlugins = (app) => {
   app.register(fastifyObjectionjs, {
     knexConfig: knexConfig[mode],
     models,
+  });
+};
+
+const addHooks = (app) => {
+  app.addHook('preHandler', async (req, reply) => {
+    reply.locals = {
+      isAuthenticated: () => req.isAuthenticated(),
+    };
   });
 };
 

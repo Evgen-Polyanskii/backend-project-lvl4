@@ -1,45 +1,44 @@
 // @ts-check
 
 import getApp from '../server/index.js';
-import { getTestData, prepareData } from './helpers/index.js';
+import { getTestData, prepareData, signIn } from './helpers';
 
 describe('test session', () => {
+  const testData = getTestData();
   let app;
   let knex;
-  let testData;
+  let user;
 
   beforeAll(async () => {
     app = await getApp();
     knex = app.objection.knex;
     await knex.migrate.latest();
     await prepareData(app);
-    testData = getTestData();
+    user = testData.users.existing;
   });
 
-  it('test sign in / sign out', async () => {
+  it('GET /session/new', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('newSession'),
     });
-
     expect(response.statusCode).toBe(200);
+  });
 
+  it('POST /session', async () => {
     const responseSignIn = await app.inject({
       method: 'POST',
       url: app.reverse('session'),
       payload: {
-        data: testData.users.existing,
+        data: user,
       },
     });
 
     expect(responseSignIn.statusCode).toBe(302);
-    // после успешной аутентификации получаем куки из ответа,
-    // они понадобятся для выполнения запросов на маршруты требующие
-    // предварительную аутентификацию
-    const [sessionCookie] = responseSignIn.cookies;
-    const { name, value } = sessionCookie;
-    const cookie = { [name]: value };
+  });
 
+  it('DELETE /session', async () => {
+    const cookie = await signIn(app, user);
     const responseSignOut = await app.inject({
       method: 'DELETE',
       url: app.reverse('session'),

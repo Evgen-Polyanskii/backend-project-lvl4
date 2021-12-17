@@ -7,12 +7,12 @@ mixin formFor(entity = null)
 
 mixin input(entity, propertyName, errors = {})
   - propertyErrors = _.get(errors, propertyName)
-  - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+  - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
   .mb-3(class=(errors[propertyName] && 'has-danger'))
     label(
       for= inputId
-    )= propertyName
+    )= t(`views.form.${propertyName}`)
     input(
       id= inputId
       name=getInputName(propertyName)
@@ -22,8 +22,8 @@ mixin input(entity, propertyName, errors = {})
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
-mixin submit(form = null)
-  input(class='btn btn-primary' type='submit')&attributes(attributes)
+mixin submit(value)
+  input(class='btn btn-primary' type='submit' value=value)&attributes(attributes)
 
 mixin buttonTo(action, method)
   form(action=action, method="post")

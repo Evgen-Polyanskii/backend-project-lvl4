@@ -3,13 +3,15 @@
 import _ from 'lodash';
 import getApp from '../server/index.js';
 import encrypt from '../server/lib/secure.js';
-import { getTestData, prepareData } from './helpers/index.js';
+import { getTestData, prepareData, signIn } from './helpers';
 
 describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
   const testData = getTestData();
+  let user;
+  let cookie;
 
   beforeAll(async () => {
     app = await getApp();
@@ -23,6 +25,8 @@ describe('test users CRUD', () => {
     // и заполняем БД тестовыми данными
     await knex.migrate.latest();
     await prepareData(app);
+    user = testData.users.existing;
+    cookie = await signIn(app, user);
   });
 
   it('index', async () => {
@@ -58,8 +62,50 @@ describe('test users CRUD', () => {
       ..._.omit(params, 'password'),
       passwordDigest: encrypt(params.password),
     };
-    const user = await models.user.query().findOne({ email: params.email });
-    expect(user).toMatchObject(expected);
+    const newUser = await models.user.query().findOne({ email: params.email });
+    expect(newUser).toMatchObject(expected);
+  });
+
+  it('edit', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('editUser', { id: user.id }),
+      cookies: cookie,
+    });
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('update', async () => {
+    const newUserData = {
+      firstName: 'Alex',
+      lastName: 'Alexov',
+    };
+    const response = await app.inject({
+      method: 'PATCH',
+      url: app.reverse('updateUserData', { id: user.id }),
+      payload: {
+        data: newUserData,
+      },
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+
+    const updateUserData = await models.user.query().findOne({ id: user.id });
+    expect(updateUserData).toMatchObject(newUserData);
+  });
+
+  it('delete', async () => {
+    const response = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('updateUserData', { id: user.id }),
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+
+    const remoteUser = await models.user.query().findOne({ email: user.id });
+    expect(remoteUser).toBeUndefined();
   });
 
   afterEach(async () => {

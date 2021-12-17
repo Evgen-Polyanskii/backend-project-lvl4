@@ -5,6 +5,6 @@ block header
 
 block content
   +formFor()(action=route('session') method='post')
-    +input(signInForm, 'email', errors)(type="text")
-    +input(signInForm, 'password')(type="password")
-    +submit(signInForm)(value=t('views.session.new.submit'))
+    +input(user, 'email', errors)(type="Email")
+    +input(user, 'password', errors)(type="password")
+    +submit(t('views.session.new.submit'))
