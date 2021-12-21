@@ -29,7 +29,7 @@ describe('test users CRUD', () => {
     cookie = await signIn(app, user);
   });
 
-  it('index', async () => {
+  it('GET users', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('users'),
@@ -38,7 +38,7 @@ describe('test users CRUD', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('new', async () => {
+  it('GET users/new', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('newUser'),
@@ -47,7 +47,7 @@ describe('test users CRUD', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('create', async () => {
+  it('create user', async () => {
     const params = testData.users.new;
     const response = await app.inject({
       method: 'POST',
@@ -66,7 +66,7 @@ describe('test users CRUD', () => {
     expect(newUser).toMatchObject(expected);
   });
 
-  it('edit', async () => {
+  it('edit user', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('editUser', { id: user.id }),
@@ -75,7 +75,7 @@ describe('test users CRUD', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('update', async () => {
+  it('update user', async () => {
     const newUserData = {
       firstName: 'Alex',
       lastName: 'Alexov',
@@ -95,7 +95,7 @@ describe('test users CRUD', () => {
     expect(updateUserData).toMatchObject(newUserData);
   });
 
-  it('delete', async () => {
+  it('delete user', async () => {
     const response = await app.inject({
       method: 'DELETE',
       url: app.reverse('updateUserData', { id: user.id }),
@@ -104,7 +104,7 @@ describe('test users CRUD', () => {
 
     expect(response.statusCode).toBe(302);
 
-    const remoteUser = await models.user.query().findOne({ email: user.id });
+    const remoteUser = await models.user.query().findOne({ id: user.id });
     expect(remoteUser).toBeUndefined();
   });
 

@@ -4,21 +4,21 @@ block content
   if users.length === 0
     h3.text-muted= t('views.users.notAnyUsers')
   else
-  table.table.table-striped
-      thead
-        tr
-          th= t('views.users.id')
-          th= t('views.users.fullName')
-          th= t('views.users.email')
-          th= t('views.users.createdAt')
-          th
-      tbody
-        each user in users
+    table.table.table-striped
+        thead
           tr
-            td= user.id
-            td= user.name
-            td= user.email
-            td= formatDate(user.createdAt)
-            td.d-md-flex
-              a(class='btn-link btn' href=route('editUser', { id: user.id }))= t('views.manage.edit')
-              +buttonTo(route('deleteUser', { id: user.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
+            th= t('views.users.id')
+            th= t('views.users.fullName')
+            th= t('views.users.email')
+            th= t('views.users.createdAt')
+            th
+        tbody
+          each user in users
+            tr
+              td= user.id
+              td= user.name
+              td= user.email
+              td= formatDate(user.createdAt)
+              td.d-md-flex
+                a(class='btn-link btn' href=route('editUser', { id: user.id }))= t('views.manage.edit')
+                +buttonTo(route('deleteUser', { id: user.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

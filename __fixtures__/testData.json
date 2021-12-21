@@ -13,5 +13,10 @@
       "password": "O6AvLIQL1cbzrre",
       "id": "1"
     }
+  },
+  "statuses": {
+    "new": {
+      "name": "Check"
+    }
   }
 }

@@ -36,17 +36,23 @@ export default (app) => {
       }
       return reply;
     })
-    .patch('/users/:id', { name: 'updateUserData' }, async (req, reply) => {
+    .patch('/users/:id', { name: 'updateUserData', preValidation: app.authenticate }, async (req, reply) => {
+      let userToUpdate;
       try {
-        const userToUpdate = await app.objection.models.user.query().findById(req.params.id);
+        const { id } = req.params;
+        if (req.user.id !== Number(id)) {
+          req.flash('error', i18next.t('flash.users.accessDenied'));
+          reply.redirect(app.reverse('users'));
+          return reply;
+        }
+        userToUpdate = await app.objection.models.user.query().findById(id);
         await userToUpdate.$query().patch(req.body.data);
         req.flash('info', i18next.t('flash.users.edit.success'));
         reply.redirect(app.reverse('users'));
         return reply;
       } catch ({ data }) {
         req.flash('error', i18next.t('flash.users.edit.error'));
-        const user = await app.objection.models.user.query().findById(req.params.id);
-        reply.render('users/edit', { user: { ...user, ...req.body.data }, errors: data });
+        reply.render('users/edit', { user: { ...userToUpdate, ...req.body.data }, errors: data });
         return reply;
       }
     })

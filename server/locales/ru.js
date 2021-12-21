@@ -13,6 +13,20 @@ module.exports = {
           success: 'Вы разлогинены',
         },
       },
+      statuses: {
+        create: {
+          success: 'Статус успешно создан',
+          error: 'Не удалось создать статус',
+        },
+        edit: {
+          success: 'Статус успешно изменён',
+          error: 'Не удалось изменить статус',
+        },
+        delete: {
+          success: 'Статус успешно удалён',
+          error: 'Не удалось удалить статус',
+        },
+      },
       users: {
         create: {
           error: 'Не удалось зарегистрировать',
@@ -33,12 +47,20 @@ module.exports = {
     layouts: {
       application: {
         users: 'Пользователи',
+        statuses: 'Статусы',
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
       },
     },
     views: {
+      form: {
+        name: 'Наименование',
+        firstName: 'Имя',
+        lastName: 'Фамилия',
+        email: 'Email',
+        password: 'Пароль',
+      },
       session: {
         new: {
           signIn: 'Вход',
@@ -71,11 +93,22 @@ module.exports = {
           more: 'Узнать Больше',
         },
       },
-      form: {
-        firstName: 'Имя',
-        lastName: 'Фамилия',
-        email: 'Email',
-        password: 'Пароль',
+      statuses: {
+        index: {
+          id: 'ID',
+          name: 'Наименование',
+          createdAt: 'Дата создания',
+          notAnyUsers: 'Статусы отсутствуют',
+          create: 'Создать статус',
+        },
+        new: {
+          title: 'Создание статуса',
+          create: 'Создать',
+        },
+        edit: {
+          title: 'Изменение статуса',
+          save: 'Изменить',
+        },
       },
     },
   },
