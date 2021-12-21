@@ -1,6 +1,9 @@
 // @ts-check
 
+const dotenv = require('dotenv');
 const path = require('path');
+
+dotenv.config();
 
 const migrations = {
   directory: path.join(__dirname, 'server', 'migrations'),
