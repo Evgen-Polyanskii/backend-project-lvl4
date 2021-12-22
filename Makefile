@@ -26,3 +26,6 @@ lint:
 
 test:
 	npm test -s
+
+test-coverage:
+	npm run coverage
