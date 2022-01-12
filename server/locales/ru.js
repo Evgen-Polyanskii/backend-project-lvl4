@@ -42,12 +42,28 @@ module.exports = {
         },
         accessDenied: 'Вы не можете редактировать или удалять другого пользователя',
       },
+      tasks: {
+        create: {
+          success: 'Задача успешно создана',
+          error: 'Не удалось создать задачу',
+        },
+        edit: {
+          success: 'Задача успешно изменена',
+          error: 'Не удалось изменить задачу',
+        },
+        delete: {
+          success: 'Задача успешно удалена',
+          error: 'Не удалось удалить задачу',
+        },
+        accessDenied: 'Вы не можете редактировать или удалять другого пользователя',
+      },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
     },
     layouts: {
       application: {
         users: 'Пользователи',
         statuses: 'Статусы',
+        tasks: 'Задачи',
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
@@ -60,6 +76,9 @@ module.exports = {
         lastName: 'Фамилия',
         email: 'Email',
         password: 'Пароль',
+        description: 'Описание',
+        statusId: 'Статус',
+        executorId: 'Исполнитель',
       },
       session: {
         new: {
@@ -98,7 +117,7 @@ module.exports = {
           id: 'ID',
           name: 'Наименование',
           createdAt: 'Дата создания',
-          notAnyUsers: 'Статусы отсутствуют',
+          notAnyStatuses: 'Статусы отсутствуют',
           create: 'Создать статус',
         },
         new: {
@@ -107,6 +126,33 @@ module.exports = {
         },
         edit: {
           title: 'Изменение статуса',
+          save: 'Изменить',
+        },
+      },
+      tasks: {
+        index: {
+          id: 'ID',
+          name: 'Наименование',
+          status: 'Стаус',
+          author: 'Автор',
+          executor: 'Исполнитель',
+          createdAt: 'Дата создания',
+          notAnyTasks: 'Задачи отсутствуют',
+          create: 'Создать задачу',
+        },
+        view: {
+          author: 'Автор',
+          executor: 'Исполнитель',
+          status: 'Статус',
+          createAt: 'Дата создания',
+        },
+        new: {
+          nonExecutor: 'Не назначен',
+          title: 'Создание задачи',
+          create: 'Создать',
+        },
+        edit: {
+          title: 'Изменение задачи',
           save: 'Изменить',
         },
       },

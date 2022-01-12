@@ -14,7 +14,7 @@ describe('test session', () => {
     knex = app.objection.knex;
     await knex.migrate.latest();
     await prepareData(app);
-    user = testData.users.existing;
+    user = testData.users.existing1;
   });
 
   it('GET /session/new', async () => {

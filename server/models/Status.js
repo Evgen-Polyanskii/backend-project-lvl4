@@ -1,8 +1,8 @@
 // @ts-check
 
-import { Model } from 'objection';
+import BaseModel from './BaseModel.js';
 
-export default class Status extends Model {
+export default class Status extends BaseModel {
   static get tableName() {
     return 'statuses';
   }
@@ -13,7 +13,7 @@ export default class Status extends Model {
       required: ['name'],
       properties: {
         id: { type: 'integer' },
-        name: { type: 'string', minLength: 1 },
+        name: { type: 'string' },
       },
     };
   }

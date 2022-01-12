@@ -1,0 +1,30 @@
+extends ../layouts/application.pug
+block content
+    if tasks.length === 0
+        h3.text-muted= t('views.tasks.index.notAnyTasks')
+        a.nav-link(href=route('newTask'))= t('views.tasks.index.create')
+    else
+        a.nav-link(href=route('newTask'))= t('views.tasks.index.create')
+        table.table.table-striped
+            thead
+                tr
+                    th= t('views.tasks.index.id')
+                    th= t('views.tasks.index.name')
+                    th= t('views.tasks.index.status')
+                    th= t('views.tasks.index.author')
+                    th= t('views.tasks.index.executor')
+                    th= t('views.tasks.index.createdAt')
+                    th
+            tbody
+              each task in tasks
+                  tr
+                      td= task.id
+                      td
+                        a(href=route('viewTask', { id: task.id }))= task.name
+                      td= task.status.name
+                      td= task.creator.fullName
+                      td= task.executor ? task.executor.fullName : t('views.tasks.new.nonExecutor')
+                      td= formatDate(task.createdAt)
+                      td.d-md-flex
+                          a(class='btn-link btn' href=route('editTask', { id: task.id }))= t('views.manage.edit')
+                          +buttonTo(route('deleteTask', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

@@ -20,12 +20,9 @@ describe('test users CRUD', () => {
   });
 
   beforeEach(async () => {
-    // тесты не должны зависеть друг от друга
-    // перед каждым тестом выполняем миграции
-    // и заполняем БД тестовыми данными
     await knex.migrate.latest();
     await prepareData(app);
-    user = testData.users.existing;
+    user = testData.users.existing1;
     cookie = await signIn(app, user);
   });
 
@@ -98,13 +95,13 @@ describe('test users CRUD', () => {
   it('delete user', async () => {
     const response = await app.inject({
       method: 'DELETE',
-      url: app.reverse('updateUserData', { id: user.id }),
+      url: app.reverse('deleteUser', { id: user.id }),
       cookies: cookie,
     });
 
     expect(response.statusCode).toBe(302);
 
-    const remoteUser = await models.user.query().findOne({ id: user.id });
+    const remoteUser = await models.user.query().findById(user.id);
     expect(remoteUser).toBeUndefined();
   });
 

@@ -59,14 +59,16 @@ export default (app) => {
     .delete('/users/:id', { name: 'deleteUser', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const { id } = req.params;
+        const userTask = await app.objection.models.task.query().findOne({ creatorId: id });
         if (req.user.id !== Number(id)) {
           req.flash('error', i18next.t('flash.users.accessDenied'));
-          reply.redirect(app.reverse('users'));
-          return reply;
+        } else if (userTask) {
+          req.flash('error', i18next.t('flash.users.delete.error'));
+        } else {
+          req.logOut();
+          await app.objection.models.user.query().deleteById(id);
+          req.flash('info', i18next.t('flash.users.delete.success'));
         }
-        req.logOut();
-        await app.objection.models.user.query().deleteById(id);
-        req.flash('info', i18next.t('flash.users.delete.success'));
         reply.redirect(app.reverse('users'));
         return reply;
       } catch (err) {
