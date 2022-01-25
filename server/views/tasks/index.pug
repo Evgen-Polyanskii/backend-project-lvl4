@@ -2,9 +2,9 @@ extends ../layouts/application.pug
 block content
     if tasks.length === 0
         h3.text-muted= t('views.tasks.index.notAnyTasks')
-        a.nav-link(href=route('newTask'))= t('views.tasks.index.create')
+        a.nav-link(href=route('tasks/new'))= t('views.tasks.index.create')
     else
-        a.nav-link(href=route('newTask'))= t('views.tasks.index.create')
+        a.nav-link(href=route('tasks/new'))= t('views.tasks.index.create')
         table.table.table-striped
             thead
                 tr
@@ -20,11 +20,11 @@ block content
                   tr
                       td= task.id
                       td
-                        a(href=route('viewTask', { id: task.id }))= task.name
+                        a(href=route('tasks/view', { id: task.id }))= task.name
                       td= task.status.name
                       td= task.creator.fullName
                       td= task.executor ? task.executor.fullName : t('views.tasks.new.nonExecutor')
                       td= formatDate(task.createdAt)
                       td.d-md-flex
-                          a(class='btn-link btn' href=route('editTask', { id: task.id }))= t('views.manage.edit')
-                          +buttonTo(route('deleteTask', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
+                          a(class='btn-link btn' href=route('tasks/edit', { id: task.id }))= t('views.manage.edit')
+                          +buttonTo(route('tasks/delete', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

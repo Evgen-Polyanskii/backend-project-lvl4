@@ -3,73 +3,72 @@
 import _ from 'lodash';
 import getApp from '../server/index.js';
 import encrypt from '../server/lib/secure.js';
-import { getTestData, prepareData, signIn } from './helpers';
+import { getUser } from '../__fixtures__/entitiesData';
+import signIn from './helpers';
 
 describe('test users CRUD', () => {
   let app;
-  let knex;
-  let models;
-  const testData = getTestData();
-  let user;
-  let cookie;
+  let Model;
+  let existUser;
+  let cookies;
 
   beforeAll(async () => {
     app = await getApp();
-    knex = app.objection.knex;
-    models = app.objection.models;
+    Model = app.objection.models.user;
   });
 
   beforeEach(async () => {
-    await knex.migrate.latest();
-    await prepareData(app);
-    user = testData.users.existing1;
-    cookie = await signIn(app, user);
+    await app.objection.knex.migrate.latest();
+    const user = getUser();
+    existUser = await Model.query().insert(user);
+
+    cookies = await signIn(app, user);
   });
 
   it('GET users', async () => {
-    const response = await app.inject({
+    const res = await app.inject({
       method: 'GET',
       url: app.reverse('users'),
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it('GET users/new', async () => {
-    const response = await app.inject({
+    const res = await app.inject({
       method: 'GET',
       url: app.reverse('newUser'),
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it('create user', async () => {
-    const params = testData.users.new;
-    const response = await app.inject({
+    const newUserData = getUser();
+    const res = await app.inject({
       method: 'POST',
       url: app.reverse('users'),
       payload: {
-        data: params,
+        data: newUserData,
       },
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(res.statusCode).toBe(302);
     const expected = {
-      ..._.omit(params, 'password'),
-      passwordDigest: encrypt(params.password),
+      ..._.omit(newUserData, 'password'),
+      passwordDigest: encrypt(newUserData.password),
     };
-    const newUser = await models.user.query().findOne({ email: params.email });
+    const newUser = await Model.query().findOne({ email: newUserData.email });
     expect(newUser).toMatchObject(expected);
   });
 
   it('edit user', async () => {
-    const response = await app.inject({
+    const res = await app.inject({
       method: 'GET',
-      url: app.reverse('editUser', { id: user.id }),
-      cookies: cookie,
+      url: app.reverse('editUser', { id: existUser.id }),
+      cookies,
     });
-    expect(response.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it('update user', async () => {
@@ -77,37 +76,37 @@ describe('test users CRUD', () => {
       firstName: 'Alex',
       lastName: 'Alexov',
     };
-    const response = await app.inject({
+    const res = await app.inject({
       method: 'PATCH',
-      url: app.reverse('updateUserData', { id: user.id }),
+      url: app.reverse('updateUserData', { id: existUser.id }),
       payload: {
         data: newUserData,
       },
-      cookies: cookie,
+      cookies,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(res.statusCode).toBe(302);
 
-    const updateUserData = await models.user.query().findOne({ id: user.id });
+    const updateUserData = await Model.query().findOne({ id: existUser.id });
     expect(updateUserData).toMatchObject(newUserData);
   });
 
   it('delete user', async () => {
-    const response = await app.inject({
+    const res = await app.inject({
       method: 'DELETE',
-      url: app.reverse('deleteUser', { id: user.id }),
-      cookies: cookie,
+      url: app.reverse('deleteUser', { id: existUser.id }),
+      cookies,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(res.statusCode).toBe(302);
 
-    const remoteUser = await models.user.query().findById(user.id);
+    const remoteUser = await Model.query().findById(existUser.id);
     expect(remoteUser).toBeUndefined();
   });
 
   afterEach(async () => {
     // после каждого теста откатываем миграции
-    await knex.migrate.rollback();
+    await app.objection.knex.migrate.rollback();
   });
 
   afterAll(() => {

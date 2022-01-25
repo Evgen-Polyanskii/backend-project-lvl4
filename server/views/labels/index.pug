@@ -1,0 +1,23 @@
+extends ../layouts/application.pug
+block content
+    if labels.length === 0
+        h3.text-muted= t('views.labels.index.notAnyTasks')
+        a.nav-link(href=route('labels/new'))= t('views.labels.index.create')
+    else
+        a.nav-link(href=route('labels/new'))= t('views.labels.index.create')
+        table.table.table-striped
+            thead
+                tr
+                    th= t('views.labels.index.id')
+                    th= t('views.labels.index.name')
+                    th= t('views.labels.index.createdAt')
+                    th
+            tbody
+              each label in labels
+                    tr
+                        td= label.id
+                        td= label.name
+                        td= formatDate(label.createdAt)
+                        td.d-md-flex
+                            a(class='btn-link btn' href=route('labels/edit', { id: label.id }))= t('views.manage.edit')
+                            +buttonTo(route('labels/delete', { id: label.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

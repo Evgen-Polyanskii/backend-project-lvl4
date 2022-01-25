@@ -1,20 +1,18 @@
 // @ts-check
 
 import getApp from '../server/index.js';
-import { getTestData, prepareData, signIn } from './helpers';
+import { getUser } from '../__fixtures__/entitiesData';
+import signIn from './helpers';
 
 describe('test session', () => {
-  const testData = getTestData();
   let app;
-  let knex;
   let user;
 
   beforeAll(async () => {
     app = await getApp();
-    knex = app.objection.knex;
-    await knex.migrate.latest();
-    await prepareData(app);
-    user = testData.users.existing1;
+    await app.objection.knex.migrate.latest();
+    user = getUser();
+    await app.objection.models.user.query().insert(user);
   });
 
   it('GET /session/new', async () => {
@@ -50,7 +48,7 @@ describe('test session', () => {
   });
 
   afterAll(async () => {
-    await knex.migrate.rollback();
+    await app.objection.knex.migrate.rollback();
     app.close();
   });
 });

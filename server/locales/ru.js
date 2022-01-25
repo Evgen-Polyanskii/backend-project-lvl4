@@ -57,12 +57,27 @@ module.exports = {
         },
         accessDenied: 'Вы не можете редактировать или удалять другого пользователя',
       },
+      labels: {
+        create: {
+          success: 'Метка успешно создана',
+          error: 'Не удалось создать метку',
+        },
+        edit: {
+          success: 'Метка успешно изменена',
+          error: 'Не удалось изменить метку',
+        },
+        delete: {
+          success: 'Метка успешно удалена',
+          error: 'Не удалось удалить метку',
+        },
+      },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
     },
     layouts: {
       application: {
         users: 'Пользователи',
         statuses: 'Статусы',
+        labels: 'Метки',
         tasks: 'Задачи',
         signIn: 'Вход',
         signUp: 'Регистрация',
@@ -79,6 +94,7 @@ module.exports = {
         description: 'Описание',
         statusId: 'Статус',
         executorId: 'Исполнитель',
+        labels: 'Метки',
       },
       session: {
         new: {
@@ -145,6 +161,7 @@ module.exports = {
           executor: 'Исполнитель',
           status: 'Статус',
           createAt: 'Дата создания',
+          labels: 'Метки',
         },
         new: {
           nonExecutor: 'Не назначен',
@@ -153,6 +170,23 @@ module.exports = {
         },
         edit: {
           title: 'Изменение задачи',
+          save: 'Изменить',
+        },
+      },
+      labels: {
+        index: {
+          id: 'ID',
+          name: 'Наименование',
+          create: 'Создать метку',
+          createdAt: 'Дата создания',
+          notAnyTasks: 'Метки отсутствуют',
+        },
+        new: {
+          title: 'Создание метки',
+          create: 'Создать',
+        },
+        edit: {
+          title: 'Изменение метки',
           save: 'Изменить',
         },
       },

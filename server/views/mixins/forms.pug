@@ -43,7 +43,7 @@ mixin textarea(entity, propertyName)
       rows= 3
     )&attributes(attributes)= entity[propertyName]
 
-mixin select(entity, propertyName, options, value, caption, description = '', errors = {})
+mixin select(propertyName, options, value, caption, errors = {}, description = '')
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)

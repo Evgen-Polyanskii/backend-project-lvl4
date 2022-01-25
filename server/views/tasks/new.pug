@@ -5,11 +5,12 @@ block header
         = t('views.tasks.new.title')
 block content
     div.w-50.mx-auto
-        +formFor()(action=route('createTask') method='post')
+        +formFor()(action=route('tasks/create') method='post')
             .d-none
                 +input(task, 'creatorId', errors, currentUserId)(type='hidden')
             +input(task, 'name', errors)(type='text', required)
             +textarea(task, 'description')
-            +select(task, 'statusId', statuses, 'id', 'name', errors)
-            +select(task, 'executorId', users, 'id', 'fullName', t('views.tasks.new.nonExecutor'), errors)
+            +select('statusId', statuses, 'id', 'name', errors)
+            +select('executorId', users, 'id', 'fullName', errors, t('views.tasks.new.nonExecutor'),)
+            +select('labels', labels, 'id', 'name', errors)(multiple=true)
             +submit(t('views.tasks.new.create'))

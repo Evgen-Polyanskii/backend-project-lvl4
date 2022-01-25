@@ -1,7 +1,7 @@
 exports.up = (knex) =>
   knex.schema.createTable('tasks', (table) => {
       table.increments('id').primary();
-      table.string('name');
+      table.string('name').unique();
       table.text('description');
       table
         .integer('status_id')

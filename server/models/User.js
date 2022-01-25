@@ -26,6 +26,27 @@ export default class User extends unique(BaseModel) {
     };
   }
 
+  static get relationMappings() {
+    return {
+      creatorTasks: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: 'Task',
+        join: {
+          from: 'users.id',
+          to: 'tasks.creatorId',
+        },
+      },
+      executorTasks: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: 'Task',
+        join: {
+          from: 'users.id',
+          to: 'tasks.executorId',
+        },
+      },
+    };
+  }
+
   set password(value) {
     this.passwordDigest = encrypt(value);
   }

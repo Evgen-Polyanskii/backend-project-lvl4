@@ -20,6 +20,13 @@ block content
                 .col= t('views.tasks.view.createAt')
                 .col= formatDate(task.createdAt)
             .row.p-1
+                .fw-bold= t('views.tasks.view.labels')
+                  - const labels = task.labels
+                  if(labels.length > 0)
+                      ul.fw-normal
+                        each label in labels
+                          li= label.name
+            .row.p-1
                 .col
-                    a(class='btn-link btn' href=route('editTask', { id: task.id }))= t('views.manage.edit')
-                    +buttonTo(route('deleteTask', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
+                    a(class='btn-link btn' href=route('tasks/edit', { id: task.id }))= t('views.manage.edit')
+                    +buttonTo(route('tasks/delete', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
