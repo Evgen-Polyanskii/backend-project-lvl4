@@ -25,6 +25,25 @@ mixin input(entity, propertyName, errors = {}, defaultValue = '')
 mixin submit(value)
   input(class='btn btn-primary' type='submit' value=value)&attributes(attributes)
 
+mixin filterSelect(propertyName, options, value, caption, filter)
+  - inputId = getInputId(propertyName)
+  .col
+    .mb-3
+      label(for= inputId)= t(`views.form.${propertyName}`)
+      select(
+        name= propertyName
+        class= 'form-select'
+        id= inputId
+      )&attributes(attributes)
+        option(value='null')
+        each el in options
+          -
+            const elValue = _.get(el, value);
+            const elCaption = _.get(el, caption);
+            const isSelected = Number(filter[propertyName]) === elValue;
+
+          option(value= elValue selected= isSelected)= elCaption
+
 mixin buttonTo(action, method)
   form(action=action, method="post")
     input(name="_method" type="hidden" value=method)
@@ -43,10 +62,15 @@ mixin textarea(entity, propertyName)
       rows= 3
     )&attributes(attributes)= entity[propertyName]
 
-mixin select(propertyName, options, value, caption, errors = {}, description = '')
+mixin select(entity, propertyName, options, caption, errors = {}, description = '')
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
+  -
+    let id;
+    const dataId = _.get(entity, propertyName, '')
+    if(!_.isArray(dataId)) id = dataId
+    else id = _.map(dataId, (i) => i.id)
   .mb-3(class= (errors[propertyName] && 'has-danger'))
     label(
       for= inputId
@@ -56,12 +80,13 @@ mixin select(propertyName, options, value, caption, errors = {}, description = '
       class= `form-select ${errors[propertyName] ? 'is-invalid' : ''}`
       id= inputId
     )&attributes(attributes)
-      if (description)
-        option(value= '')= description
+      option(value= '')= description
       each el in options
         -
-          const elValue = _.get(el, value);
+          const elValue = _.get(el, 'id');
           const elCaption = _.get(el, caption);
+          const isSelected = _.isArray(id) ? _.includes(id, elValue) : id === elValue;
 
-        option(value= elValue)= elCaption
-
+        option(value= elValue selected=isSelected)= elCaption
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')

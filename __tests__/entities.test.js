@@ -1,3 +1,4 @@
+import { beforeEach } from '@jest/globals';
 import getApp from '../server/index.js';
 import {
   getLabel,
@@ -137,6 +138,54 @@ describe.each(tests)('CRUD %s', (entity) => {
 
     expect(res.statusCode).toBe(302);
     expect(deleted).toBeUndefined();
+  });
+});
+
+describe('GET /tasks with params', () => {
+  beforeEach(async () => {
+    Model = app.objection.models.task;
+    await app.objection.knex.migrate.latest();
+
+    const user = getUser();
+    await app.objection.models.user.query().insert(user);
+
+    const task = getTasks();
+    await Model.query().insert(task);
+
+    cookies = await signIn(app, user);
+  });
+
+  afterEach(async () => {
+    await app.objection.knex.migrate.rollback();
+  });
+
+  it('GET /tasks', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: app.reverse('tasks'),
+      query: {
+        executorId: null,
+        creatorId: null,
+        statusId: 2,
+        labels: null,
+      },
+      cookies,
+    });
+
+    expect(res.statusCode).toBe(200);
+
+    const statusId = 2;
+    const newTask = { ...getTasks(), statusId };
+    await Model.query().insert(newTask);
+    const numberOfTasks = await Model.query();
+
+    expect(numberOfTasks).toHaveLength(2);
+
+    const taskQuery = await Model.query()
+      .withGraphJoined('[status, creator, executor, labels]')
+      .modify('filterStatusId', statusId);
+
+    expect(taskQuery).toHaveLength(1);
   });
 });
 

@@ -1,11 +1,28 @@
 import i18next from 'i18next';
+import parseFilters from '../lib/parseFilters';
 
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await app.objection.models.task.query()
-        .withGraphJoined('[status, creator, executor]');
-      reply.render('tasks/index', { tasks });
+      const filter = parseFilters(req.query);
+      const currentUserId = req.user.id;
+
+      const taskQuery = app.objection.models.task.query()
+        .withGraphJoined('[status, creator, executor, labels]')
+        .modify('filterExecutorId', filter.executorId)
+        .modify('filterLabels', filter.labels)
+        .modify('filterStatusId', filter.statusId)
+        .modify('filterCreatorId', filter.creatorId);
+
+      const [tasks, users, statuses, labels] = await Promise.all([
+        taskQuery,
+        app.objection.models.user.query(),
+        app.objection.models.status.query(),
+        app.objection.models.label.query(),
+      ]);
+      reply.render('tasks/index', {
+        tasks, statuses, users, labels, currentUserId, filter,
+      });
       return reply;
     })
     .get('/tasks/new', { name: 'tasks/new', preValidation: app.authenticate }, async (req, reply) => {

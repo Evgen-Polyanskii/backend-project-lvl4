@@ -5,6 +5,17 @@ block content
         a.nav-link(href=route('tasks/new'))= t('views.tasks.index.create')
     else
         a.nav-link(href=route('tasks/new'))= t('views.tasks.index.create')
+    .card-body.p-2.bg-light
+        +formFor()(action=route('tasks'), method='GET')
+            h4.text-center= t('views.tasks.index.filter')
+            .row
+                +filterSelect('executorId', users, 'id', 'fullName', filter)
+                +filterSelect('labels', labels, 'id', 'name', filter)
+                +filterSelect('statusId', statuses, 'id', 'name', filter)
+            .mb-3.form-check
+                input.form-check-input(id='data_isCreatorUser' type='checkbox' name='creatorId', value=currentUserId)
+                label.form-check-label(for='data_isCreatorUser')= t('views.tasks.index.creatByUser')
+            +submit(t('views.tasks.index.show'))
         table.table.table-striped
             thead
                 tr

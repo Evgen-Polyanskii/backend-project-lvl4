@@ -8,6 +8,23 @@ export default class Task extends BaseModel {
     return 'tasks';
   }
 
+  static get modifiers() {
+    return {
+      filterExecutorId(query, id) {
+        query.skipUndefined().where('executorId', id);
+      },
+      filterLabels(query, id) {
+        query.skipUndefined().where('labels.id', id);
+      },
+      filterStatusId(query, id) {
+        query.skipUndefined().where('statusId', id);
+      },
+      filterCreatorId(query, id) {
+        query.skipUndefined().where('creatorId', id);
+      },
+    };
+  }
+
   $parseJson(json, opt) {
     // eslint-disable-next-line no-param-reassign
     json = super.$parseJson(json, opt);

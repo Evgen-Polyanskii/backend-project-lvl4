@@ -155,6 +155,9 @@ module.exports = {
           createdAt: 'Дата создания',
           notAnyTasks: 'Задачи отсутствуют',
           create: 'Создать задачу',
+          filter: 'Фильтр',
+          show: 'Показать',
+          creatByUser: 'Только мои задачи',
         },
         view: {
           author: 'Автор',
