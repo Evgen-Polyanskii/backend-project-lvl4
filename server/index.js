@@ -17,6 +17,7 @@ import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
+import Rollbar from 'rollbar';
 import ru from './locales/ru.js';
 // @ts-ignore
 import webpackConfig from '../webpack.config.babel.js';
@@ -76,6 +77,18 @@ const setupLocalization = () => {
     });
 };
 
+const setupRollbar = (app) => {
+  const rollbar = new Rollbar({
+    accessToken: process.env.ROLLBAR_TOKEN,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+  });
+
+  app.setErrorHandler((error, request, reply) => {
+    rollbar.log(`Error: ${error}`, request, reply);
+  });
+};
+
 const registerPlugins = (app) => {
   app.register(fastifySensible);
   app.register(fastifyErrorPage);
@@ -127,12 +140,13 @@ export default () => {
     },
   });
   registerPlugins(app);
-
   setupLocalization();
   setUpViews(app);
   setUpStaticAssets(app);
-  addRoutes(app);
+  setupRollbar(app);
   addHooks(app);
+
+  app.after(() => addRoutes(app));
 
   return app;
 };
