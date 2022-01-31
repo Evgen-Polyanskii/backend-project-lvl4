@@ -60,14 +60,13 @@ export default (app) => {
       return reply;
     })
     .post(resource, { name: 'tasks/create', preValidation: app.authenticate }, async (req, reply) => {
+      const labelIds = req.body.data.labels || [];
       try {
-        const task = await app.objection.models.task.fromJson(req.body.data);
-        const { labels, ...taskData } = task;
-        const labelIds = labels || [];
+        const newTask = await app.objection.models.task.fromJson(req.body.data);
         await app.objection.models.task.transaction(async (trx) => {
           const taskLabels = await app.objection.models.label.query(trx).findByIds(labelIds);
           await app.objection.models.task.query(trx).allowGraph('labels').insertGraph([{
-            ...taskData, labels: taskLabels,
+            ...newTask, labels: taskLabels,
           }], { relate: true });
         });
         req.flash('info', i18next.t('flash.tasks.create.success'));
@@ -75,16 +74,26 @@ export default (app) => {
         return reply;
       } catch (err) {
         req.flash('error', i18next.t('flash.tasks.create.error'));
-        reply.redirect(app.reverse('tasks/new'));
+        const task = new app.objection.models.task().$set(req.body.data);
+        const [users, statuses, labels] = await Promise.all([
+          app.objection.models.user.query(),
+          app.objection.models.status.query(),
+          app.objection.models.label.query(),
+        ]);
+        task.labelIds = labelIds;
+
+        reply.render(app.reverse('tasks/new'), {
+          task, users, statuses, labels, errors: err.data,
+        });
         return reply;
       }
     })
     .patch(`${resource}/:id`, { name: 'tasks/update', preValidation: app.authenticate }, async (req, reply) => {
+      const labelIds = req.body.data.labels ?? [];
+      const taskId = Number(req.params.id);
       try {
-        const taskId = Number(req.params.id);
-        const { labels, ...taskData } = await app.objection.models.task.fromJson(req.body.data);
+        const taskData = await app.objection.models.task.fromJson(req.body.data);
         const newData = { ...taskData, id: taskId };
-        const labelIds = labels || [];
         await app.objection.models.task.transaction(async (trx) => {
           const taskLabels = await app.objection.models.label.query(trx).findByIds(labelIds);
           await app.objection.models.task.query(trx)
@@ -95,7 +104,20 @@ export default (app) => {
         return reply;
       } catch (err) {
         req.flash('error', i18next.t('flash.statuses.edit.error'));
-        reply.redirect(app.reverse('tasks/edit', { id: req.params.id }));
+        const oldTask = await app.objection.models.task.query().findById(taskId);
+        const task = new app.objection.models.task().$set({ ...oldTask, ...req.body.data });
+        const [users, statuses, labels] = await Promise.all([ // eslint-disable-line
+          app.objection.models.user.query(),
+          app.objection.models.status.query(),
+          app.objection.models.label.query(),
+        ]);
+        reply.render('tasks/edit', {
+          task,
+          users,
+          statuses,
+          labels,
+          errors: err.data,
+        });
         return reply;
       }
     })
