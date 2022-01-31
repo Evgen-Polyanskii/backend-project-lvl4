@@ -175,7 +175,7 @@ describe('GET /tasks with params', () => {
     expect(res.statusCode).toBe(200);
 
     const statusId = 2;
-    const newTask = { ...getTasks(), statusId };
+    const newTask = { ...getTasks(), name: 'TEST_task', statusId };
     await Model.query().insert(newTask);
     const numberOfTasks = await Model.query();
 

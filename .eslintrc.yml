@@ -2,16 +2,20 @@
 
 root: true
 
-extends:
-  - 'airbnb-base'
-  - 'plugin:jest/recommended'
-
-parser: babel-eslint
+plugins:
+  - jest
 
 env:
-  browser: true
   node: true
   jest: true
+  browser: true
+
+extends:
+  - "airbnb-base"
+  - "plugin:jest/recommended"
+  - "plugin:jest-playwright/recommended"
+
+parser: babel-eslint
 
 rules:
   no-console: 0
@@ -23,5 +27,5 @@ rules:
     - error
     - props: true
       ignorePropertyModificationsFor:
-      - req
-      - reply
+        - req
+        - reply

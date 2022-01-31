@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+exports.up = (knex) => (
   knex.schema.createTable('tasks_labels', (table) => {
     table
       .integer('label_id')
@@ -10,6 +10,7 @@ exports.up = (knex) =>
       .unsigned()
       .references('tasks.id')
       .onDelete('CASCADE');
-  });
+  })
+);
 
 exports.down = (knex) => knex.schema.dropTable('tasks_labels');
