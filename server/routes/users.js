@@ -68,7 +68,7 @@ export default (app) => {
         } else {
           req.logOut();
           await user.$query().delete();
-          req.flash('info', i18next.t('flash.users.delete.success'));
+          req.flash('alert', i18next.t('flash.users.delete.success'));
         }
         reply.redirect(app.reverse('users'));
         return reply;

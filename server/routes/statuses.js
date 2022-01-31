@@ -53,7 +53,7 @@ export default (app) => {
           req.flash('error', i18next.t('flash.statuses.delete.error'));
         } else {
           await status.$query().delete();
-          req.flash('info', i18next.t('flash.statuses.delete.success'));
+          req.flash('alert', i18next.t('flash.statuses.delete.success'));
         }
         reply.redirect(app.reverse('statuses'));
         return reply;

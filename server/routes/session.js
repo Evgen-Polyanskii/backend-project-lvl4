@@ -25,7 +25,7 @@ export default (app) => {
     }))
     .delete('/session', (req, reply) => {
       req.logOut();
-      req.flash('info', i18next.t('flash.session.delete.success'));
+      req.flash('alert', i18next.t('flash.session.delete.success'));
       reply.redirect(app.reverse('root'));
     });
 };

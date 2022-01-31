@@ -111,7 +111,7 @@ export default (app) => {
             await task.$relatedQuery('labels', trx).unrelate().where({ taskId });
             await task.$query(trx).delete();
           });
-          req.flash('info', i18next.t('flash.tasks.delete.success'));
+          req.flash('alert', i18next.t('flash.tasks.delete.success'));
         }
         reply.redirect(app.reverse('tasks'));
         return reply;
