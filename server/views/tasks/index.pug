@@ -9,9 +9,9 @@ block content
         +formFor()(action=route('tasks'), method='GET')
             h4.text-center= t('views.tasks.index.filter')
             .row
-                +filterSelect('executorId', users, 'id', 'fullName', filter)
+                +filterSelect('executor', users, 'id', 'fullName', filter)
                 +filterSelect('labels', labels, 'id', 'name', filter)
-                +filterSelect('statusId', statuses, 'id', 'name', filter)
+                +filterSelect('status', statuses, 'id', 'name', filter)
             .mb-3.form-check
                 input.form-check-input(id='data_isCreatorUser' type='checkbox' name='creatorId', value=currentUserId)
                 label.form-check-label(for='data_isCreatorUser')= t('views.tasks.index.creatByUser')

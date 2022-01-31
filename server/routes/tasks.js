@@ -6,12 +6,11 @@ export default (app) => {
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
       const filter = parseFilters(req.query);
       const currentUserId = req.user.id;
-
       const taskQuery = app.objection.models.task.query()
         .withGraphJoined('[status, creator, executor, labels]')
-        .modify('filterExecutorId', filter.executorId)
+        .modify('filterExecutorId', filter.executor)
         .modify('filterLabels', filter.labels)
-        .modify('filterStatusId', filter.statusId)
+        .modify('filterStatusId', filter.status)
         .modify('filterCreatorId', filter.creatorId);
 
       const [tasks, users, statuses, labels] = await Promise.all([

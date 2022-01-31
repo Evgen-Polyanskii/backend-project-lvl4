@@ -92,8 +92,8 @@ module.exports = {
         email: 'Email',
         password: 'Пароль',
         description: 'Описание',
-        statusId: 'Статус',
-        executorId: 'Исполнитель',
+        status: 'Статус',
+        executor: 'Исполнитель',
         labels: 'Метки',
       },
       session: {

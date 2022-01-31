@@ -164,9 +164,9 @@ describe('GET /tasks with params', () => {
       method: 'GET',
       url: app.reverse('tasks'),
       query: {
-        executorId: null,
+        executor: null,
         creatorId: null,
-        statusId: 2,
+        status: 2,
         labels: null,
       },
       cookies,
