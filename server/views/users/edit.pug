@@ -1,10 +1,10 @@
 extends ../layouts/application.pug
 
 block header
-    = t('views.users.edit.title')
+    = t('views.title.editUser')
 
 block content
     +formFor()(action=route('updateUserData', { id: user.id }) method='post')
       include _form.pug
       input(name='_method' type='hidden' value='patch')
-      input.btn.btn-primary(type='submit' value=t('views.users.edit.save'))
+      input.btn.btn-primary(type='submit' value=t('views.manage.edit'))

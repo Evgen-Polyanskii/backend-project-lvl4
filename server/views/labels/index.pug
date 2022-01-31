@@ -1,16 +1,16 @@
 extends ../layouts/application.pug
 block content
     if labels.length === 0
-        h3.text-muted= t('views.labels.index.notAnyTasks')
-        a.nav-link(href=route('labels/new'))= t('views.labels.index.create')
+        h3.text-muted= t('views.info.notAnyLabels')
+        a.nav-link(href=route('labels/new'))= t('views.manage.createLabel')
     else
-        a.nav-link(href=route('labels/new'))= t('views.labels.index.create')
+        a.nav-link(href=route('labels/new'))= t('views.manage.createLabel')
         table.table.table-striped
             thead
                 tr
-                    th= t('views.labels.index.id')
-                    th= t('views.labels.index.name')
-                    th= t('views.labels.index.createdAt')
+                    th= t('views.form.id')
+                    th= t('views.form.name')
+                    th= t('views.form.createdAt')
                     th
             tbody
               each label in labels

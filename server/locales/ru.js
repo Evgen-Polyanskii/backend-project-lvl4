@@ -86,7 +86,11 @@ module.exports = {
     },
     views: {
       form: {
+        author: 'Автор',
+        createdAt: 'Дата создания',
+        creatByUser: 'Только мои задачи',
         name: 'Наименование',
+        id: 'ID',
         firstName: 'Имя',
         lastName: 'Фамилия',
         email: 'Email',
@@ -98,101 +102,41 @@ module.exports = {
         executorId: 'Исполнитель',
         labels: 'Метки',
       },
-      session: {
-        new: {
-          signIn: 'Вход',
-          submit: 'Войти',
-        },
-      },
       manage: {
+        create: 'Создать',
         edit: 'Изменить',
         delete: 'Удалить',
+        submit: 'Войти',
+        show: 'Показать',
+        createTask: 'Создать задачу',
+        createLabel: 'Создать метку',
+        createStatus: 'Создать статус',
+        createUser: 'Сохранить',
       },
-      users: {
-        id: 'ID',
-        fullName: 'Полное имя',
-        email: 'Email',
-        createdAt: 'Дата создания',
+      title: {
+        filter: 'Фильтр',
+        createTask: 'Создание задачи',
+        createLabel: 'Создание метки',
+        createStatus: 'Создание статуса',
+        createUser: 'Регистрация',
+        editTask: 'Изменение задачи',
+        editLabel: 'Изменение метки',
+        editStatus: 'Изменение статуса',
+        editUser: 'Изменение пользователя',
+        signIn: 'Вход',
+      },
+      info: {
+        notAnyLabels: 'Метки отсутствуют',
+        notAnyTasks: 'Задачи отсутствуют',
+        notAnyStatuses: 'Статусы отсутствуют',
+        nonExecutor: 'Не назначен',
         notAnyUsers: 'Пользователи отсутствуют',
-        new: {
-          submit: 'Сохранить',
-          signUp: 'Регистрация',
-        },
-        edit: {
-          title: 'Изменение пользователя',
-          save: 'Изменить',
-        },
       },
       welcome: {
         index: {
           hello: 'Привет от Хекслета!',
           description: 'Практические курсы по программированию',
           more: 'Узнать Больше',
-        },
-      },
-      statuses: {
-        index: {
-          id: 'ID',
-          name: 'Наименование',
-          createdAt: 'Дата создания',
-          notAnyStatuses: 'Статусы отсутствуют',
-          create: 'Создать статус',
-        },
-        new: {
-          title: 'Создание статуса',
-          create: 'Создать',
-        },
-        edit: {
-          title: 'Изменение статуса',
-          save: 'Изменить',
-        },
-      },
-      tasks: {
-        index: {
-          id: 'ID',
-          name: 'Наименование',
-          status: 'Стаус',
-          author: 'Автор',
-          executor: 'Исполнитель',
-          createdAt: 'Дата создания',
-          notAnyTasks: 'Задачи отсутствуют',
-          create: 'Создать задачу',
-          filter: 'Фильтр',
-          show: 'Показать',
-          creatByUser: 'Только мои задачи',
-        },
-        view: {
-          author: 'Автор',
-          executor: 'Исполнитель',
-          status: 'Статус',
-          createAt: 'Дата создания',
-          labels: 'Метки',
-        },
-        new: {
-          nonExecutor: 'Не назначен',
-          title: 'Создание задачи',
-          create: 'Создать',
-        },
-        edit: {
-          title: 'Изменение задачи',
-          save: 'Изменить',
-        },
-      },
-      labels: {
-        index: {
-          id: 'ID',
-          name: 'Наименование',
-          create: 'Создать метку',
-          createdAt: 'Дата создания',
-          notAnyTasks: 'Метки отсутствуют',
-        },
-        new: {
-          title: 'Создание метки',
-          create: 'Создать',
-        },
-        edit: {
-          title: 'Изменение метки',
-          save: 'Изменить',
         },
       },
     },

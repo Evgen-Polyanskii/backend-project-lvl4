@@ -1,16 +1,16 @@
 extends ../layouts/application.pug
 block content
   if statuses.length === 0
-    h3.text-muted= t('views.statuses.index.notAnyStatuses')
-    a.nav-link(href=(route('statuses/new')))= t('views.statuses.index.create')
+    h3.text-muted= t('views.info.notAnyStatuses')
+    a.nav-link(href=(route('statuses/new')))= t('views.manage.createStatus')
   else
-    a.nav-link(href=(route('statuses/new')))= t('views.statuses.index.create')
+    a.nav-link(href=(route('statuses/new')))= t('views.manage.createStatus')
     table.table.table-striped
       thead
         tr
-          th= t('views.statuses.index.id')
-          th= t('views.statuses.index.name')
-          th= t('views.statuses.index.createdAt')
+          th= t('views.form.id')
+          th= t('views.form.name')
+          th= t('views.form.createdAt')
           th
       tbody
         each status in statuses

@@ -2,7 +2,7 @@ extends ../layouts/application.pug
 
 block header
     div.text-center
-        = t('views.tasks.edit.title')
+        = t('views.title.editTask')
 block content
     div.w-50.mx-auto
         +formFor()(action=route('tasks/update', { id: task.id }) method='post')
@@ -11,7 +11,7 @@ block content
             +input(task, 'name', errors)(type='text', required)
             +textarea(task, 'description')
             +select(task, 'statusId', statuses, 'name', errors)
-            +select(task, 'executorId', users, 'fullName', errors, t('views.tasks.new.nonExecutor'))
+            +select(task, 'executorId', users, 'fullName', errors, t('views.info.nonExecutor'))
             +select(task, 'labels', labels, 'name', errors)(multiple=true)
             input(name='_method' type='hidden' value='patch')
-            input.btn.btn-primary(type='submit' value=t('views.tasks.edit.save'))
+            input.btn.btn-primary(type='submit' value=t('views.manage.edit'))

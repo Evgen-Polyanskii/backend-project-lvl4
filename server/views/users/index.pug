@@ -2,15 +2,15 @@ extends ../layouts/application.pug
 
 block content
   if users.length === 0
-    h3.text-muted= t('views.users.notAnyUsers')
+    h3.text-muted= t('views.info.notAnyUsers')
   else
     table.table.table-striped
         thead
           tr
-            th= t('views.users.id')
-            th= t('views.users.fullName')
-            th= t('views.users.email')
-            th= t('views.users.createdAt')
+            th= t('views.form.id')
+            th= t('views.form.fullName')
+            th= t('views.form.email')
+            th= t('views.form.createdAt')
             th
         tbody
           each user in users

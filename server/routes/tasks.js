@@ -1,9 +1,11 @@
 import i18next from 'i18next';
 import parseFilters from '../lib/parseFilters';
 
+const resource = '/tasks';
+
 export default (app) => {
   app
-    .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
+    .get(resource, { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
       const filter = parseFilters(req.query);
       const currentUserId = req.user.id;
       const taskQuery = app.objection.models.task.query()
@@ -24,7 +26,7 @@ export default (app) => {
       });
       return reply;
     })
-    .get('/tasks/new', { name: 'tasks/new', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/new`, { name: 'tasks/new', preValidation: app.authenticate }, async (req, reply) => {
       const currentUserId = req.user.id;
       const task = new app.objection.models.task();
       const [users, statuses, labels] = await Promise.all([
@@ -37,14 +39,14 @@ export default (app) => {
       });
       return reply;
     })
-    .get('/tasks/:id', { name: 'tasks/view', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id`, { name: 'tasks/view', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = req.params.id;
       const task = await app.objection.models.task.query().findById(taskId)
         .withGraphJoined('[status, creator, executor, labels]');
       reply.render('tasks/view', { task });
       return reply;
     })
-    .get('/tasks/:id/edit', { name: 'tasks/edit', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id/edit`, { name: 'tasks/edit', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = req.params.id;
       const [task, users, statuses, labels] = await Promise.all([
         app.objection.models.task.query().findById(taskId).withGraphJoined('[status, creator, executor, labels]'),
@@ -57,7 +59,7 @@ export default (app) => {
       });
       return reply;
     })
-    .post('/tasks', { name: 'tasks/create', preValidation: app.authenticate }, async (req, reply) => {
+    .post(resource, { name: 'tasks/create', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const task = await app.objection.models.task.fromJson(req.body.data);
         const { labels, ...taskData } = task;
@@ -77,7 +79,7 @@ export default (app) => {
         return reply;
       }
     })
-    .patch('/tasks/:id', { name: 'tasks/update', preValidation: app.authenticate }, async (req, reply) => {
+    .patch(`${resource}/:id`, { name: 'tasks/update', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const taskId = Number(req.params.id);
         const { labels, ...taskData } = await app.objection.models.task.fromJson(req.body.data);
@@ -97,7 +99,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete('/tasks/:id', { name: 'tasks/delete', preValidation: app.authenticate }, async (req, reply) => {
+    .delete(`${resource}/:id`, { name: 'tasks/delete', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = Number(req.params.id);
       const userId = req.user.id;
       try {

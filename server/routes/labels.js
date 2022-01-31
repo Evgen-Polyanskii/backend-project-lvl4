@@ -1,23 +1,25 @@
 import i18next from 'i18next';
 
+const resource = '/labels';
+
 export default (app) => {
   app
-    .get('/labels', { name: 'labels', preValidation: app.authenticate }, async (req, reply) => {
+    .get(resource, { name: 'labels', preValidation: app.authenticate }, async (req, reply) => {
       const labels = await app.objection.models.label.query();
       reply.render('labels/index', { labels });
       return reply;
     })
-    .get('/labels/new', { name: 'labels/new', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/new`, { name: 'labels/new', preValidation: app.authenticate }, async (req, reply) => {
       const label = new app.objection.models.label();
       reply.render('labels/new', { label });
     })
-    .get('/labels/:id/edit', { name: 'labels/edit', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id/edit`, { name: 'labels/edit', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const label = await app.objection.models.label.query().findById(id);
       reply.render('labels/edit', { label });
       return reply;
     })
-    .post('/labels', { name: 'labels/create', preValidation: app.authenticate }, async (req, reply) => {
+    .post(resource, { name: 'labels/create', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const label = await app.objection.models.label.fromJson(req.body.data);
         await app.objection.models.label.query().insert(label);
@@ -30,7 +32,7 @@ export default (app) => {
         return reply;
       }
     })
-    .patch('/labels/:id', { name: 'labels/update', preValidation: app.authenticate }, async (req, reply) => {
+    .patch(`${resource}/:id`, { name: 'labels/update', preValidation: app.authenticate }, async (req, reply) => {
       let labelToUpdate;
       try {
         labelToUpdate = await app.objection.models.label.query().findById(req.params.id);
@@ -44,7 +46,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete('/labels/:id', { name: 'labels/delete', preValidation: app.authenticate }, async (req, reply) => {
+    .delete(`${resource}/:id`, { name: 'labels/delete', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const { id } = req.params;
         const label = await app.objection.models.label.query().findById(id);

@@ -2,18 +2,20 @@
 
 import i18next from 'i18next';
 
+const resource = '/users';
+
 export default (app) => {
   app
-    .get('/users', { name: 'users' }, async (req, reply) => {
+    .get(resource, { name: 'users' }, async (req, reply) => {
       const users = await app.objection.models.user.query();
       reply.render('users/index', { users });
       return reply;
     })
-    .get('/users/new', { name: 'newUser' }, (req, reply) => {
+    .get(`${resource}/new`, { name: 'newUser' }, (req, reply) => {
       const user = new app.objection.models.user();
       reply.render('users/new', { user });
     })
-    .get('/users/:id/edit', { name: 'editUser', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id/edit`, { name: 'editUser', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       if (req.user.id !== Number(id)) {
         req.flash('error', i18next.t('flash.users.accessDenied'));
@@ -24,7 +26,7 @@ export default (app) => {
       reply.render('users/edit', { user });
       return reply;
     })
-    .post('/users', async (req, reply) => {
+    .post(resource, async (req, reply) => {
       try {
         const user = await app.objection.models.user.fromJson(req.body.data);
         await app.objection.models.user.query().insert(user);
@@ -36,7 +38,7 @@ export default (app) => {
       }
       return reply;
     })
-    .patch('/users/:id', { name: 'updateUserData', preValidation: app.authenticate }, async (req, reply) => {
+    .patch(`${resource}/:id`, { name: 'updateUserData', preValidation: app.authenticate }, async (req, reply) => {
       let userToUpdate;
       try {
         const { id } = req.params;
@@ -56,7 +58,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete('/users/:id', { name: 'deleteUser', preValidation: app.authenticate }, async (req, reply) => {
+    .delete(`${resource}/:id`, { name: 'deleteUser', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const { id } = req.params;
         const user = await app.objection.models.user.query().findById(id);
