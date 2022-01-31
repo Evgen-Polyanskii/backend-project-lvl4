@@ -103,7 +103,7 @@ export default (app) => {
         reply.redirect(app.reverse('tasks'));
         return reply;
       } catch (err) {
-        req.flash('error', i18next.t('flash.statuses.edit.error'));
+        req.flash('error', i18next.t('flash.tasks.edit.error'));
         const oldTask = await app.objection.models.task.query().findById(taskId);
         const task = new app.objection.models.task().$set({ ...oldTask, ...req.body.data });
         const [users, statuses, labels] = await Promise.all([ // eslint-disable-line
