@@ -58,7 +58,7 @@ export default (app) => {
         reply.redirect(app.reverse('labels'));
         return reply;
       } catch ({ data }) {
-        req.flash('alert', i18next.t('flash.labels.delete.error'));
+        req.flash('error', i18next.t('flash.labels.delete.error'));
         reply.redirect(app.reverse('labels'));
         return reply;
       }
