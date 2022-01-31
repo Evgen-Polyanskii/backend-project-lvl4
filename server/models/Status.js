@@ -16,7 +16,7 @@ export default class Status extends unique(BaseModel) {
       required: ['name'],
       properties: {
         id: { type: 'integer' },
-        name: { type: 'string' },
+        name: { type: 'string', minLength: 1 },
       },
     };
   }
