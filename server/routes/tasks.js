@@ -11,7 +11,7 @@ export default (app) => {
       const taskQuery = app.objection.models.task.query()
         .withGraphJoined('[status, creator, executor, labels]')
         .modify('filterExecutorId', filter.executor)
-        .modify('filterLabels', filter.labels)
+        .modify('filterLabels', filter.label)
         .modify('filterStatusId', filter.status)
         .modify('filterCreatorId', filter.creatorId);
 

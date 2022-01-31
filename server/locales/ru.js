@@ -101,6 +101,7 @@ module.exports = {
         statusId: 'Статус',
         executorId: 'Исполнитель',
         labels: 'Метки',
+        label: 'Метка',
       },
       manage: {
         create: 'Создать',

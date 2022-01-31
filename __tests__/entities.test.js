@@ -167,7 +167,7 @@ describe('GET /tasks with params', () => {
         executor: null,
         creatorId: null,
         status: 2,
-        labels: null,
+        label: null,
       },
       cookies,
     });

@@ -10,7 +10,7 @@ block content
             h4.text-center= t('views.title.filter')
             .row
                 +filterSelect('executor', users, 'id', 'fullName', filter)
-                +filterSelect('labels', labels, 'id', 'name', filter)
+                +filterSelect('label', labels, 'id', 'name', filter)
                 +filterSelect('status', statuses, 'id', 'name', filter)
             .mb-3.form-check
                 input.form-check-input(id='data_isCreatorUser' type='checkbox' name='creatorId', value=currentUserId)
