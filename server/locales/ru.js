@@ -94,6 +94,8 @@ module.exports = {
         description: 'Описание',
         status: 'Статус',
         executor: 'Исполнитель',
+        statusId: 'Статус',
+        executorId: 'Исполнитель',
         labels: 'Метки',
       },
       session: {
