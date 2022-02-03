@@ -92,6 +92,7 @@ module.exports = {
         name: 'Наименование',
         id: 'ID',
         firstName: 'Имя',
+        fullName: 'Полное имя',
         lastName: 'Фамилия',
         email: 'Email',
         password: 'Пароль',

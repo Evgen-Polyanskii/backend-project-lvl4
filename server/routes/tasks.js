@@ -1,12 +1,12 @@
 import i18next from 'i18next';
-import parseFilters from '../lib/parseFilters';
+import { utilities, parceDate } from '../lib/utilities';
 
 const resource = '/tasks';
 
 export default (app) => {
   app
     .get(resource, { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      const filter = parseFilters(req.query);
+      const filter = utilities(req.query);
       const currentUserId = req.user.id;
       const taskQuery = app.objection.models.task.query()
         .withGraphJoined('[status, creator, executor, labels]')
@@ -61,8 +61,9 @@ export default (app) => {
     })
     .post(resource, { name: 'tasks/create', preValidation: app.authenticate }, async (req, reply) => {
       const labelIds = req.body.data.labels || [];
+      const data = parceDate(req.body.data);
       try {
-        const newTask = await app.objection.models.task.fromJson(req.body.data);
+        const newTask = await app.objection.models.task.fromJson(data);
         await app.objection.models.task.transaction(async (trx) => {
           const taskLabels = await app.objection.models.label.query(trx).findByIds(labelIds);
           await app.objection.models.task.query(trx).allowGraph('labels').insertGraph([{
@@ -74,7 +75,7 @@ export default (app) => {
         return reply;
       } catch (err) {
         req.flash('error', i18next.t('flash.tasks.create.error'));
-        const task = new app.objection.models.task().$set(req.body.data);
+        const task = new app.objection.models.task().$set(data);
         const [users, statuses, labels] = await Promise.all([
           app.objection.models.user.query(),
           app.objection.models.status.query(),
@@ -90,9 +91,10 @@ export default (app) => {
     })
     .patch(`${resource}/:id`, { name: 'tasks/update', preValidation: app.authenticate }, async (req, reply) => {
       const labelIds = req.body.data.labels ?? [];
+      const data = parceDate(req.body.data);
       const taskId = Number(req.params.id);
       try {
-        const taskData = await app.objection.models.task.fromJson(req.body.data);
+        const taskData = await app.objection.models.task.fromJson(data);
         const newData = { ...taskData, id: taskId };
         await app.objection.models.task.transaction(async (trx) => {
           const taskLabels = await app.objection.models.label.query(trx).findByIds(labelIds);
@@ -105,7 +107,7 @@ export default (app) => {
       } catch (err) {
         req.flash('error', i18next.t('flash.tasks.edit.error'));
         const oldTask = await app.objection.models.task.query().findById(taskId);
-        const task = new app.objection.models.task().$set({ ...oldTask, ...req.body.data });
+        const task = new app.objection.models.task().$set({ ...oldTask, ...data });
         const [users, statuses, labels] = await Promise.all([ // eslint-disable-line
           app.objection.models.user.query(),
           app.objection.models.status.query(),
