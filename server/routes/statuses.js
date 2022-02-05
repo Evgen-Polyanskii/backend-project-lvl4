@@ -5,7 +5,7 @@ const resource = '/statuses';
 export default (app) => {
   app
     .get(resource, { name: 'statuses', preValidation: app.authenticate }, async (req, reply) => {
-      const statuses = await app.objection.models.status1.query();
+      const statuses = await app.objection.models.status.query();
       reply.render('statuses/index', { statuses });
       return reply;
     })
