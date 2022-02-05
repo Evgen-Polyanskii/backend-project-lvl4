@@ -38,7 +38,7 @@ export default (app) => {
       }
       return reply;
     })
-    .patch(`${resource}/:id`, { name: 'updateUserData', preValidation: app.authenticate }, async (req, reply) => {
+    .patch(`${resource}/:id`, { name: 'user', preValidation: app.authenticate }, async (req, reply) => {
       let userToUpdate;
       try {
         const { id } = req.params;
@@ -58,7 +58,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete(`${resource}/:id`, { name: 'deleteUser', preValidation: app.authenticate }, async (req, reply) => {
+    .delete(`${resource}/:id`, { preValidation: app.authenticate }, async (req, reply) => {
       try {
         const { id } = req.params;
         const user = await app.objection.models.user.query().findById(id);

@@ -2,9 +2,9 @@ extends ../layouts/application.pug
 block content
   if statuses.length === 0
     h3.text-muted= t('views.info.notAnyStatuses')
-    a.nav-link(href=(route('statuses/new')))= t('views.manage.createStatus')
+    a.nav-link(href=(route('new_status')))= t('views.manage.createStatus')
   else
-    a.nav-link(href=(route('statuses/new')))= t('views.manage.createStatus')
+    a.nav-link(href=(route('new_status')))= t('views.manage.createStatus')
     table.table.table-striped
       thead
         tr
@@ -19,5 +19,5 @@ block content
             td= status.name
             td= formatDate(status.createdAt)
             td.d-md-flex
-              a(class='btn-link btn' href=route('statuses/edit', { id: status.id }))= t('views.manage.edit')
-              +buttonTo(route('statuses/delete', { id: status.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
+              a(class='btn-link btn' href=route('edit_status', { id: status.id }))= t('views.manage.edit')
+              +buttonTo(route('status', { id: status.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

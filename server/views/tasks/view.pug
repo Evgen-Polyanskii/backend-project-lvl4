@@ -28,5 +28,5 @@ block content
                           li= label.name
             .row.p-1
                 .col
-                    a(class='btn-link btn' href=route('tasks/edit', { id: task.id }))= t('views.manage.edit')
-                    +buttonTo(route('tasks/delete', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
+                    a(class='btn-link btn' href=route('edit_task', { id: task.id }))= t('views.manage.edit')
+                    +buttonTo(route('task', { id: task.id }), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

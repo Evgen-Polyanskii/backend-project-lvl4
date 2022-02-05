@@ -78,7 +78,7 @@ describe('test users CRUD', () => {
     };
     const res = await app.inject({
       method: 'PATCH',
-      url: app.reverse('updateUserData', { id: existUser.id }),
+      url: app.reverse('user', { id: existUser.id }),
       payload: {
         data: newUserData,
       },
@@ -94,7 +94,7 @@ describe('test users CRUD', () => {
   it('delete user', async () => {
     const res = await app.inject({
       method: 'DELETE',
-      url: app.reverse('deleteUser', { id: existUser.id }),
+      url: app.reverse('user', { id: existUser.id }),
       cookies,
     });
 

@@ -10,14 +10,13 @@ import fastifyFormbody from 'fastify-formbody';
 import fastifySecureSession from 'fastify-secure-session';
 import fastifyPassport from 'fastify-passport';
 import fastifySensible from 'fastify-sensible';
-// import fastifyFlash from 'fastify-flash';
 import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import fastifyMethodOverride from 'fastify-method-override';
 import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
-import Rollbar from 'rollbar';
+import fastifyErrorToRollbar from './lib/fastifyErrorToRollbar.js';
 import ru from './locales/ru.js';
 // @ts-ignore
 import webpackConfig from '../webpack.config.babel.js';
@@ -32,7 +31,6 @@ dotenv.config();
 const mode = process.env.NODE_ENV || 'development';
 const isProduction = mode === 'production';
 const isDevelopment = mode === 'development';
-
 const setUpViews = (app) => {
   const { devServer } = webpackConfig;
   const devHost = `http://${devServer.host}:${devServer.port}`;
@@ -77,21 +75,10 @@ const setupLocalization = () => {
     });
 };
 
-const setupRollbar = (app) => {
-  app.setErrorHandler((error, request, reply) => {
-    const rollbar = new Rollbar({
-      accessToken: process.env.ROLLBAR_TOKEN,
-      captureUncaught: true,
-      captureUnhandledRejections: true,
-    });
-    rollbar.log(`Error: ${error}`, request, reply);
-    reply.send(error);
-  });
-};
-
 const registerPlugins = (app) => {
   app.register(fastifySensible);
   app.register(fastifyErrorPage);
+  if (isProduction) app.register(fastifyErrorToRollbar);
   app.register(fastifyReverseRoutes);
   app.register(fastifyFormbody, { parser: qs.parse });
   app.register(fastifySecureSession, {
@@ -142,7 +129,6 @@ export default () => {
   setupLocalization();
   setUpViews(app);
   setUpStaticAssets(app);
-  setupRollbar(app);
   addHooks(app);
   addRoutes(app);
   app.ready();

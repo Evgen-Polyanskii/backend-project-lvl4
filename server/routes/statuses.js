@@ -5,21 +5,21 @@ const resource = '/statuses';
 export default (app) => {
   app
     .get(resource, { name: 'statuses', preValidation: app.authenticate }, async (req, reply) => {
-      const statuses = await app.objection.models.status.query();
+      const statuses = await app.objection.models.status1.query();
       reply.render('statuses/index', { statuses });
       return reply;
     })
-    .get(`${resource}/new`, { name: 'statuses/new', preValidation: app.authenticate }, (req, reply) => {
+    .get(`${resource}/new`, { name: 'new_status', preValidation: app.authenticate }, (req, reply) => {
       const status = new app.objection.models.status();
       reply.render('statuses/new', { status });
     })
-    .get(`${resource}/:id/edit`, { name: 'statuses/edit', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id/edit`, { name: 'edit_status', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const status = await app.objection.models.status.query().findById(id);
       reply.render('statuses/edit', { status });
       return reply;
     })
-    .post(resource, { name: 'statuses/create', preValidation: app.authenticate }, async (req, reply) => {
+    .post(resource, { preValidation: app.authenticate }, async (req, reply) => {
       try {
         const status = await app.objection.models.status.fromJson(req.body.data);
         await app.objection.models.status.query().insert(status);
@@ -32,7 +32,7 @@ export default (app) => {
         return reply;
       }
     })
-    .patch(`${resource}/:id`, { name: 'statuses/update', preValidation: app.authenticate }, async (req, reply) => {
+    .patch(`${resource}/:id`, { name: 'status', preValidation: app.authenticate }, async (req, reply) => {
       let statusToUpdate;
       try {
         statusToUpdate = await app.objection.models.status.query().findById(req.params.id);
@@ -46,7 +46,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete(`${resource}/:id`, { name: 'statuses/delete', preValidation: app.authenticate }, async (req, reply) => {
+    .delete(`${resource}/:id`, { preValidation: app.authenticate }, async (req, reply) => {
       try {
         const { id } = req.params;
         const status = await app.objection.models.status.query().findById(id);

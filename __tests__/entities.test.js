@@ -14,21 +14,21 @@ let cookies = {};
 
 const tests = [
   {
-    routesName: 'labels',
+    routesName: 'label',
     modelName: 'label',
     findKey: 'name',
     editKey: ['name'],
     fakeData: getLabel(),
   },
   {
-    routesName: 'statuses',
+    routesName: 'status',
     modelName: 'status',
     findKey: 'name',
     editKey: ['name'],
     fakeData: getStatus(),
   },
   {
-    routesName: 'tasks',
+    routesName: 'task',
     modelName: 'task',
     findKey: 'name',
     editKey: ['name', 'description'],
@@ -59,9 +59,10 @@ describe.each(tests)('CRUD %s', (entity) => {
   });
 
   it(`GET ${entity.routesName}`, async () => {
+    const rout = entity.routesName.replace(/s$/, 'se');
     const res = await app.inject({
       method: 'GET',
-      url: app.reverse(entity.routesName),
+      url: app.reverse(`${rout}s`),
       cookies,
     });
 
@@ -71,7 +72,7 @@ describe.each(tests)('CRUD %s', (entity) => {
   it(`GET new ${entity.routesName}`, async () => {
     const res = await app.inject({
       method: 'GET',
-      url: app.reverse(`${entity.routesName}/new`),
+      url: app.reverse(`new_${entity.routesName}`),
       cookies,
     });
     expect(res.statusCode).toBe(200);
@@ -82,7 +83,7 @@ describe.each(tests)('CRUD %s', (entity) => {
 
     const res = await app.inject({
       method: 'GET',
-      url: app.reverse(`${entity.routesName}/edit`, { id: inserted.id }),
+      url: app.reverse(`edit_${entity.routesName}`, { id: inserted.id }),
       cookies,
     });
 
@@ -90,9 +91,10 @@ describe.each(tests)('CRUD %s', (entity) => {
   });
 
   it(`POST ${entity.routesName}`, async () => {
+    const rout = entity.routesName.replace(/s$/, 'se');
     const res = await app.inject({
       method: 'POST',
-      url: app.reverse(`${entity.routesName}/create`),
+      url: app.reverse(`${rout}s`),
       payload: { data: entity.fakeData },
       cookies,
     });
@@ -110,7 +112,7 @@ describe.each(tests)('CRUD %s', (entity) => {
     const updateData = entity.editKey.reduce((acc, key) => ({ ...acc, [key]: `${inserted[key]}_UPDATE` }), {});
     const res = await app.inject({
       method: 'PATCH',
-      url: app.reverse(`${entity.routesName}/update`, { id: inserted.id }),
+      url: app.reverse(entity.routesName, { id: inserted.id }),
       payload: {
         data: { ...inserted, ...updateData },
       },
@@ -128,7 +130,7 @@ describe.each(tests)('CRUD %s', (entity) => {
 
     const res = await app.inject({
       method: 'DELETE',
-      url: app.reverse(`${entity.routesName}/delete`, { id: inserted.id }),
+      url: app.reverse(entity.routesName, { id: inserted.id }),
       cookies,
     });
 

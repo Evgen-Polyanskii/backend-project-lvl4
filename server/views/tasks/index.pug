@@ -2,9 +2,9 @@ extends ../layouts/application.pug
 block content
     if tasks.length === 0
         h3.text-muted= t('views.info.notAnyTasks')
-        a.nav-link(href=route('tasks/new'))= t('views.manage.createTask')
+        a.nav-link(href=route('new_task'))= t('views.manage.createTask')
     else
-        a.nav-link(href=route('tasks/new'))= t('views.manage.createTask')
+        a.nav-link(href=route('new_task'))= t('views.manage.createTask')
     .card
         .card-body.p-2.bg-light
             +formFor()(action=route('tasks'), method='GET')
@@ -32,11 +32,11 @@ block content
               tr
                   td= task.id
                   td
-                      a(href=route('tasks/view', {id: task.id}))= task.name
+                      a(href=route('task', {id: task.id}))= task.name
                   td= task.status.name
                   td= task.creator.fullName
                   td= task.executor ? task.executor.fullName : t('views.info.nonExecutor')
                   td= formatDate(task.createdAt)
                   td.d-md-flex
-                      a(class='btn-link btn' href=route('tasks/edit', {id: task.id}))= t('views.manage.edit')
-                      +buttonTo(route('tasks/delete', {id: task.id}), 'delete')(class='btn-link btn' value=t('views.manage.delete'))
+                      a(class='btn-link btn' href=route('edit_task', {id: task.id}))= t('views.manage.edit')
+                      +buttonTo(route('task', {id: task.id}), 'delete')(class='btn-link btn' value=t('views.manage.delete'))

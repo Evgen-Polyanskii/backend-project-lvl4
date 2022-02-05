@@ -26,7 +26,7 @@ export default (app) => {
       });
       return reply;
     })
-    .get(`${resource}/new`, { name: 'tasks/new', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/new`, { name: 'new_task', preValidation: app.authenticate }, async (req, reply) => {
       const task = new app.objection.models.task();
       const [users, statuses, labels] = await Promise.all([
         app.objection.models.user.query(),
@@ -38,14 +38,14 @@ export default (app) => {
       });
       return reply;
     })
-    .get(`${resource}/:id`, { name: 'tasks/view', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id`, { name: 'task', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = req.params.id;
       const task = await app.objection.models.task.query().findById(taskId)
         .withGraphJoined('[status, creator, executor, labels]');
       reply.render('tasks/view', { task });
       return reply;
     })
-    .get(`${resource}/:id/edit`, { name: 'tasks/edit', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id/edit`, { name: 'edit_task', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = req.params.id;
       const [task, users, statuses, labels] = await Promise.all([
         app.objection.models.task.query().findById(taskId).withGraphJoined('[status, creator, executor, labels]'),
@@ -58,7 +58,7 @@ export default (app) => {
       });
       return reply;
     })
-    .post(resource, { name: 'tasks/create', preValidation: app.authenticate }, async (req, reply) => {
+    .post(resource, { preValidation: app.authenticate }, async (req, reply) => {
       const labelIds = req.body.data.labels || [];
       const creatorId = req.user.id;
       const data = { ...parceDate(req.body.data), creatorId };
@@ -89,7 +89,7 @@ export default (app) => {
         return reply;
       }
     })
-    .patch(`${resource}/:id`, { name: 'tasks/update', preValidation: app.authenticate }, async (req, reply) => {
+    .patch(`${resource}/:id`, { preValidation: app.authenticate }, async (req, reply) => {
       const labelIds = req.body.data.labels ?? [];
       const data = parceDate(req.body.data);
       const taskId = Number(req.params.id);
@@ -123,7 +123,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete(`${resource}/:id`, { name: 'tasks/delete', preValidation: app.authenticate }, async (req, reply) => {
+    .delete(`${resource}/:id`, { preValidation: app.authenticate }, async (req, reply) => {
       const taskId = Number(req.params.id);
       const userId = req.user.id;
       try {
