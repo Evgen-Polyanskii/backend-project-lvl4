@@ -6,6 +6,8 @@ export default fp((app, options, next) => {
     accessToken: process.env.ROLLBAR_TOKEN,
     captureUncaught: true,
     captureUnhandledRejections: true,
+    environment: "production",
+    endpoint: "https://api.rollbar.com/api/1/item",
   });
   app.setErrorHandler((err, req, reply) => {
     try {
