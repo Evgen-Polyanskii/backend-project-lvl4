@@ -83,7 +83,7 @@ export default (app) => {
         ]);
         task.labelIds = labelIds;
 
-        reply.render(app.reverse('tasks/new'), {
+        reply.render('tasks/new', {
           task, users, statuses, labels, errors: err.data,
         });
         return reply;
