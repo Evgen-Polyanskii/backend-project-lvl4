@@ -27,7 +27,6 @@ export default (app) => {
       return reply;
     })
     .get(`${resource}/new`, { name: 'tasks/new', preValidation: app.authenticate }, async (req, reply) => {
-      const currentUserId = req.user.id;
       const task = new app.objection.models.task();
       const [users, statuses, labels] = await Promise.all([
         app.objection.models.user.query(),
@@ -35,7 +34,7 @@ export default (app) => {
         app.objection.models.label.query(),
       ]);
       reply.render('tasks/new', {
-        task, users, statuses, labels, currentUserId,
+        task, users, statuses, labels,
       });
       return reply;
     })
@@ -61,7 +60,8 @@ export default (app) => {
     })
     .post(resource, { name: 'tasks/create', preValidation: app.authenticate }, async (req, reply) => {
       const labelIds = req.body.data.labels || [];
-      const data = parceDate(req.body.data);
+      const creatorId = req.user.id;
+      const data = { ...parceDate(req.body.data), creatorId };
       try {
         const newTask = await app.objection.models.task.fromJson(data);
         await app.objection.models.task.transaction(async (trx) => {

@@ -78,14 +78,14 @@ const setupLocalization = () => {
 };
 
 const setupRollbar = (app) => {
-  const rollbar = new Rollbar({
-    accessToken: process.env.ROLLBAR_TOKEN,
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-  });
-
   app.setErrorHandler((error, request, reply) => {
+    const rollbar = new Rollbar({
+      accessToken: process.env.ROLLBAR_TOKEN,
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+    });
     rollbar.log(`Error: ${error}`, request, reply);
+    reply.send(error);
   });
 };
 
@@ -144,8 +144,8 @@ export default () => {
   setUpStaticAssets(app);
   setupRollbar(app);
   addHooks(app);
-
-  app.after(() => addRoutes(app));
+  addRoutes(app);
+  app.ready();
 
   return app;
 };

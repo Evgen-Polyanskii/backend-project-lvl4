@@ -6,26 +6,22 @@ exports.up = (knex) => (
     table
       .integer('status_id')
       .unsigned()
-      .references('id')
-      .inTable('statuses')
+      .references('statuses.id')
       .index()
       .onDelete('SET NULL');
     table
       .integer('executor_id')
       .unsigned()
-      .references('id')
-      .inTable('users')
+      .references('users.id')
       .index()
       .onDelete('SET NULL');
     table
       .integer('creator_id')
       .unsigned()
-      .references('id')
-      .inTable('users')
+      .references('users.id')
       .index()
       .onDelete('SET NULL');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('updated_at').defaultTo(knex.fn.now());
+    table.timestamps(true, true);
   })
 );
 

@@ -10,6 +10,8 @@ exports.up = (knex) => (
       .unsigned()
       .references('tasks.id')
       .onDelete('CASCADE');
+    table.primary(['label_id', 'task_id']);
+    table.index(['task_id', 'label_id']);
   })
 );
 
