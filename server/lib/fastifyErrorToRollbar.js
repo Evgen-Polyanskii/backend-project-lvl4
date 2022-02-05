@@ -7,7 +7,7 @@ export default fp((app, options, next) => {
     captureUncaught: true,
     captureUnhandledRejections: true,
     environment: "production",
-    endpoint: "https://api.rollbar.com/api/1/item",
+    endpoint: "https://rollbar.com/m4x1morlov/all/items",
   });
   app.setErrorHandler((err, req, reply) => {
     try {
