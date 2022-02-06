@@ -7,8 +7,12 @@
 # Менеджер задач
 
 ## Развернутая версия
-<h3><a href = "https://ep-hexlet-task-manager.herokuapp.com/">Task-manager</a></h>
+###[Task-manager](https://ep-hexlet-task-manager.herokuapp.com/)
 
+
+###Для ознакомления с ресурсом можно воспользоваться данным профилем:
+**Login**: *user@example.com*
+**Password**: *user*
 
 ## Локальная установка
 
