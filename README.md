@@ -7,11 +7,13 @@
 # Менеджер задач
 
 ## Развернутая версия
-###[Task-manager](https://ep-hexlet-task-manager.herokuapp.com/)
+
+### [Task-manager](https://ep-hexlet-task-manager.herokuapp.com/)
 
 
-###Для ознакомления с ресурсом можно воспользоваться данным профилем:
-**Login**: *user@example.com*
+### Для ознакомления с ресурсом можно воспользоваться данным профилем:
+
+**Login**: *user@example.com* <br>
 **Password**: *user*
 
 ## Локальная установка
