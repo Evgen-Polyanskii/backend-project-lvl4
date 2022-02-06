@@ -9,7 +9,7 @@ export default fp((app, options, next) => {
   });
   app.setErrorHandler((err, req, reply) => {
     try {
-      rollbar.error(`Error: ${err}`, req, reply);
+      rollbar.error(err, req);
       reply.send(err);
     } catch (error) {
       reply.send(error);
