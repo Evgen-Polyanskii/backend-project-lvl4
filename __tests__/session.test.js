@@ -18,7 +18,7 @@ describe('test session', () => {
   it('GET /session/new', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newSession'),
+      url: app.reverse('new_Session'),
     });
     expect(response.statusCode).toBe(200);
   });

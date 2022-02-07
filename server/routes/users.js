@@ -11,11 +11,11 @@ export default (app) => {
       reply.render('users/index', { users });
       return reply;
     })
-    .get(`${resource}/new`, { name: 'newUser' }, (req, reply) => {
+    .get(`${resource}/new`, { name: 'new_User' }, (req, reply) => {
       const user = new app.objection.models.user();
       reply.render('users/new', { user });
     })
-    .get(`${resource}/:id/edit`, { name: 'editUser', preValidation: app.authenticate }, async (req, reply) => {
+    .get(`${resource}/:id/edit`, { name: 'edit_User', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       if (req.user.id !== Number(id)) {
         req.flash('error', i18next.t('flash.users.accessDenied'));

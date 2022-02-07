@@ -6,7 +6,7 @@ const resource = '/session';
 
 export default (app) => {
   app
-    .get(`${resource}/new`, { name: 'newSession' }, (req, reply) => {
+    .get(`${resource}/new`, { name: 'new_Session' }, (req, reply) => {
       const signInForm = {};
       reply.render('session/new', { signInForm });
     })

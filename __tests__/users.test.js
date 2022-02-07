@@ -37,7 +37,7 @@ describe('test users CRUD', () => {
   it('GET users/new', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: app.reverse('newUser'),
+      url: app.reverse('new_User'),
     });
 
     expect(res.statusCode).toBe(200);
@@ -65,7 +65,7 @@ describe('test users CRUD', () => {
   it('edit user', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: app.reverse('editUser', { id: existUser.id }),
+      url: app.reverse('edit_User', { id: existUser.id }),
       cookies,
     });
     expect(res.statusCode).toBe(200);
